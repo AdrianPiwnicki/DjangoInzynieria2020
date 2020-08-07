@@ -1,7 +1,7 @@
 .idea
 
-# Environments
-#.env
-#.venv
-#env/
-#venv/
+ Environments
+.env
+.venv
+env/
+venv/

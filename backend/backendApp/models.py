@@ -8,6 +8,7 @@ class Produkty(models.Model):
         sztuki = 'szt'
         litr = 'l'
         mililitr = 'ml'
+        szczypta = 'szczypta'
 
     class Kategorie(models.TextChoices):
         Inne = 'inne'
@@ -17,6 +18,7 @@ class Produkty(models.Model):
         Nabial = 'nabiał'
         Mieso = 'mięso'
         Ryby = 'ryby'
+        Przyprawy = 'przyprawy'
 
     nazwa = models.CharField(max_length=50, null=False)
     przelicznik = models.CharField(choices=Przeliczniki.choices, default=Przeliczniki.kilogram, max_length=20)

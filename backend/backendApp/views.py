@@ -1,7 +1,9 @@
+import django
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.views import APIView
 
 from backend.backendApp.models import Produkty, Przepisy
@@ -29,3 +31,7 @@ class ProduktyViewSet(viewsets.ModelViewSet):
 class PrzepisyViewSet(viewsets.ModelViewSet):
     queryset = Przepisy.objects.all()
     serializer_class = PrzepisySerializer
+
+    def get(self, request, *args, **kwargs):
+        #produkty = request.data
+        return JsonResposne(request.data, safe=False)

@@ -35,7 +35,7 @@ class Skladniki(models.Model):
     przelicznik = models.CharField(choices=Przelicznik.choices, default=Przelicznik.Sztuki, max_length=20)
 
     def __str__(self):
-        return self.produkt.nazwa
+        return self.produkt.nazwa + " (" + str(self.ilosc) + " " + self.przelicznik + ")"
 
 
 class Przepisy(models.Model):

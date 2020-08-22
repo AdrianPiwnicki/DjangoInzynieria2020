@@ -1,11 +1,17 @@
-import django
+import operator
+from functools import reduce
+
 from django.contrib.auth.models import User
-from rest_framework import viewsets, status
+from django.db.models import Q, Count
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
+from rest_framework import viewsets, status, generics
+from rest_framework.decorators import action
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from rest_framework.utils import json
 from rest_framework.views import APIView
-
 from backend.backendApp.models import Produkty, Przepisy
 from backend.backendApp.serializers import UserSerializer, ProduktySerializer, PrzepisySerializer
 
@@ -13,6 +19,7 @@ from backend.backendApp.serializers import UserSerializer, ProduktySerializer, P
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+
 
 class ProduktyViewSet(viewsets.ModelViewSet):
     queryset = Produkty.objects.all()
@@ -32,6 +39,15 @@ class PrzepisyViewSet(viewsets.ModelViewSet):
     queryset = Przepisy.objects.all()
     serializer_class = PrzepisySerializer
 
-    def get(self, request, *args, **kwargs):
-        #produkty = request.data
-        return JsonResposne(request.data, safe=False)
+
+def lista_przepisow(request):
+    body = json.loads(request.body)
+    list1 = body['produkty']
+    przepisy = Przepisy.objects.filter(skladniki__in=list1).annotate(num_attr=Count('skladniki')).filter(num_attr=len(list1))
+    if przepisy.exists():
+        serializer = PrzepisySerializer(przepisy, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        return HttpResponse("%s" % "Brak przepisów")
+
+

@@ -8,5 +8,6 @@ router.register(r'produkty', views.ProduktyViewSet)
 router.register(r'przepisy', views.PrzepisyViewSet)
 
 urlpatterns = [
+    path('lista-przepisow', views.lista_przepisow),
     path('', include(router.urls)),
 ]

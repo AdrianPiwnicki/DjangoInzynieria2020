@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Produkty(models.Model):
@@ -15,6 +17,7 @@ class Produkty(models.Model):
     nazwa = models.CharField(max_length=50, null=False)
     grafika = models.FileField(blank=True, null=True)
     kategoria = models.CharField(choices=Kategorie.choices, default=Kategorie.Inne, max_length=20)
+    popularnosc = models.IntegerField(default=0)
 
     def __str__(self):
         return self.nazwa + " (" + str(self.kategoria) + ")"
@@ -47,3 +50,10 @@ class Przepisy(models.Model):
 
     def __str__(self):
         return self.nazwa + " - " + str(self.czas) + " minut"
+
+
+@receiver(post_save, sender=Przepisy)
+def przepisy_produkty(sender, instance, **kwargs):
+    for i in instance.skladniki.all():
+        i.produkt.popularnosc += 1
+        i.produkt.save()

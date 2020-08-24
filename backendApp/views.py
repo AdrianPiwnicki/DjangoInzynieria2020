@@ -27,6 +27,11 @@ class ProduktyViewSet(viewsets.ModelViewSet):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = ProduktySerializer(queryset, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
 
 class ProduktyWarzywa(generics.ListAPIView):
     queryset = Produkty.objects.filter(kategoria="warzywa").order_by('-popularnosc')

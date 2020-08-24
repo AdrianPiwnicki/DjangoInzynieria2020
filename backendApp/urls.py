@@ -4,7 +4,7 @@ from backendApp import views
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
-router.register(r'produkty', views.ProduktyViewSet)
+router.register(r'produkty-wszystkie', views.ProduktyViewSet)
 router.register(r'przepisy', views.PrzepisyViewSet)
 
 urlpatterns = [

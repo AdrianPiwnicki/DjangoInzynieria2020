@@ -14,7 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class ProduktyViewSet(viewsets.ModelViewSet):
+class ProduktyViewSet(generics.ListAPIView):
     queryset = Produkty.objects.all()
     serializer_class = ProduktySerializer
     parser_class = (FileUploadParser,)

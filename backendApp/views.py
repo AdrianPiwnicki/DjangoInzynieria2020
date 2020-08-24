@@ -122,7 +122,7 @@ class PrzepisyViewSet(viewsets.ModelViewSet):
 #     body = json.loads(request.body)
 #     list1 = body['produkty']
 #     ls_przepisow = []
-#     przepisy = Przepisy.objects.filter(skladniki__in=list1).annotate(num_attr=Count('skladniki__produkt')).filter(num_attr=len(list1))
+#     przepisy = Przepisy.objects.filter(skladniki__in=list1).annotate(num_attr=Count('skladniki')).filter(num_attr=len(list1))
 #     if przepisy.exists():
 #         for przepis in przepisy:
 #             if str(przepis.skladniki.count) == str(len(list1)):
@@ -137,8 +137,7 @@ def lista_przepisow(request):
     body = json.loads(request.body)
     list1 = body['produkty']
     ls_przepisow = list()
-    for przepis in Przepisy.objects.filter(skladniki__in=list1).annotate(num_attr=Count('skladniki__produkt')).filter(
-            num_attr=len(list1)):
+    for przepis in Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(num_attr=Count('skladniki__produkt')).filter(num_attr=len(list1)):
         if przepis.skladniki.count() == len(list1):
             ls_przepisow.append(przepis)
     serializer = PrzepisySerializer(ls_przepisow, many=True)

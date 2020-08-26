@@ -17,6 +17,6 @@ urlpatterns = [
     path('produkty-mieso', views.ProduktyMieso.as_view()),
     path('produkty-ryby', views.ProduktyRyby.as_view()),
     path('produkty-przyprawy', views.ProduktyPrzyprawy.as_view()),
-    path('produkty-wszystkie', views.ProduktyWszystkie.as_view()),
+    path('produkty-all', views.ProduktyWszystkie.as_view()),
     path('', include(router.urls)),
 ]

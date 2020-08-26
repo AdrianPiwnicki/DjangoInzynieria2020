@@ -5,6 +5,7 @@ from backendApp import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'przepisy', views.PrzepisyViewSet)
+router.register(r'produkty', views.ProduktyViewSet)
 
 urlpatterns = [
     path('lista-przepisow', views.lista_przepisow),
@@ -16,6 +17,6 @@ urlpatterns = [
     path('produkty-mieso', views.ProduktyMieso.as_view()),
     path('produkty-ryby', views.ProduktyRyby.as_view()),
     path('produkty-przyprawy', views.ProduktyPrzyprawy.as_view()),
-    path('produkty-wszystkie', views.ProduktyViewSet.as_view()),
+    path('produkty-wszystkie', views.ProduktyWszystkie.as_view()),
     path('', include(router.urls)),
 ]

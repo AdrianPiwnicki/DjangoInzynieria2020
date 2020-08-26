@@ -14,7 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class ProduktyViewSet(generics.ListAPIView):
+class ProduktyViewSet(viewsets.ModelViewSet):
     queryset = Produkty.objects.all()
     serializer_class = ProduktySerializer
     parser_class = (FileUploadParser,)
@@ -27,7 +27,12 @@ class ProduktyViewSet(generics.ListAPIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def list(self, request, *args, **kwargs):
+
+class ProduktyWszystkie(generics.ListAPIView):
+    queryset = Produkty.objects.all().order_by('-popularnosc')
+    serializer_class = ProduktySerializer
+
+    def list(self, request, *arg, **kwargs):
         queryset = self.get_queryset()
         serializer = ProduktySerializer(queryset, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -137,7 +142,8 @@ def lista_przepisow(request):
     body = json.loads(request.body)
     list1 = body['produkty']
     ls_przepisow = list()
-    for przepis in Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(num_attr=Count('skladniki__produkt')).filter(num_attr=len(list1)):
+    for przepis in Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(
+            num_attr=Count('skladniki__produkt')).filter(num_attr=len(list1)):
         if przepis.skladniki.count() == len(list1):
             ls_przepisow.append(przepis)
     serializer = PrzepisySerializer(ls_przepisow, many=True)

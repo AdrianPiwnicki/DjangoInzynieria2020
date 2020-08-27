@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Max
 from rest_framework import viewsets, status, generics
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
@@ -123,28 +123,25 @@ class PrzepisyViewSet(viewsets.ModelViewSet):
     serializer_class = PrzepisySerializer
 
 
-# def lista_przepisow(request):
-#     body = json.loads(request.body)
-#     list1 = body['produkty']
-#     ls_przepisow = []
-#     przepisy = Przepisy.objects.filter(skladniki__in=list1).annotate(num_attr=Count('skladniki')).filter(num_attr=len(list1))
-#     if przepisy.exists():
-#         for przepis in przepisy:
-#             if str(przepis.skladniki.count) == str(len(list1)):
-#                 ls_przepisow.append(przepis)
-#         serializer = PrzepisySerializer(ls_przepisow, many=True)
-#         return JsonResponse(serializer.data, safe=False)
-#     else:
-#         return HttpResponse("%s" % "Brak przepisów")
-
-
 def lista_przepisow(request):
     body = json.loads(request.body)
     list1 = body['produkty']
     ls_przepisow = list()
-    for przepis in Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(
-            num_attr=Count('skladniki__produkt')).filter(num_attr=len(list1)):
-        if przepis.skladniki.count() == len(list1):
-            ls_przepisow.append(przepis)
+    max_skladnikow = Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(
+        num_attr=Count('skladniki__produkt')).filter(num_attr=len(list1))
+    max_skladnik = max_skladnikow[0]
+
+    for max_count in max_skladnikow.all():
+        if max_count.skladniki.count() > max_skladnik.skladniki.count():
+            max_skladnik = max_count
+    max_skladnik = max_skladnik.skladniki.count()
+
+    for addition in range(max_skladnik):
+        for i in range(len(list1), 0, -1):
+            for przepis in Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(
+                    num_attr=Count('skladniki__produkt')).filter(num_attr=i):
+                if przepis.skladniki.count() == i + addition:
+                    ls_przepisow.append(przepis)
+
     serializer = PrzepisySerializer(ls_przepisow, many=True)
     return JsonResponse(serializer.data, safe=False)

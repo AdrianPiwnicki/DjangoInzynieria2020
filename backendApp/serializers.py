@@ -46,4 +46,4 @@ class MinPrzepisySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Przepisy
-        fields = ['id', 'nazwa', 'przygotowanie']
+        fields = ['id', 'nazwa', 'przygotowanie', 'photo']

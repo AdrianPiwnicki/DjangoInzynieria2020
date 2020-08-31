@@ -145,7 +145,7 @@ def lista_przepisow(request):
                     przepis.przygotowanie = przepis.przygotowanie[0:255]
                     if przepis.przygotowanie[254] == "!" or przepis.przygotowanie[254] == "?" or przepis.przygotowanie[254] == " " or przepis.przygotowanie[254] == ",":
                         przepis.przygotowanie = przepis.przygotowanie[0:254]+"..."
-                    if przepis.przygotowanie[254] == ".":
+                    elif przepis.przygotowanie[254] == ".":
                         przepis.przygotowanie += ".."
                     else:
                         przepis.przygotowanie += "..."

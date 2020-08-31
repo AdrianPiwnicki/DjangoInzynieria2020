@@ -40,3 +40,10 @@ class PrzepisySerializer(serializers.ModelSerializer):
 
         przepis.save()
         return przepis
+
+
+class MinPrzepisySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Przepisy
+        fields = ['id', 'nazwa', 'przygotowanie']

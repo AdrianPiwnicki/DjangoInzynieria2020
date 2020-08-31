@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponse
 from rest_framework.utils import json
 from backendApp.models import Produkty, Przepisy
-from backendApp.serializers import UserSerializer, ProduktySerializer, PrzepisySerializer
+from backendApp.serializers import UserSerializer, ProduktySerializer, PrzepisySerializer, MinPrzepisySerializer
+from django.db.models.functions import Substr
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -141,7 +142,14 @@ def lista_przepisow(request):
             for przepis in Przepisy.objects.filter(skladniki__produkt__in=list1).annotate(
                     num_attr=Count('skladniki__produkt')).filter(num_attr=i):
                 if przepis.skladniki.count() == i + addition:
+                    przepis.przygotowanie = przepis.przygotowanie[0:255]
+                    if przepis.przygotowanie[254] == "!" or przepis.przygotowanie[254] == "?" or przepis.przygotowanie[254] == " " or przepis.przygotowanie[254] == ",":
+                        przepis.przygotowanie = przepis.przygotowanie[0:254]+"..."
+                    if przepis.przygotowanie[254] == ".":
+                        przepis.przygotowanie += ".."
+                    else:
+                        przepis.przygotowanie += "..."
                     ls_przepisow.append(przepis)
 
-    serializer = PrzepisySerializer(ls_przepisow, many=True)
+    serializer = MinPrzepisySerializer(ls_przepisow, many=True)
     return JsonResponse(serializer.data, safe=False)

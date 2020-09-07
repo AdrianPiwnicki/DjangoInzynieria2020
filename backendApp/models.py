@@ -3,8 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Produkty(models.Model):
-    class Kategorie(models.TextChoices):
+class Products(models.Model):
+    class Category(models.TextChoices):
         Inne = 'inne'
         Owoce = 'owoce'
         Warzywa = 'warzywa'
@@ -14,17 +14,17 @@ class Produkty(models.Model):
         Ryby = 'ryby'
         Przyprawy = 'przyprawy'
 
-    nazwa = models.CharField(max_length=50, null=False)
-    grafika = models.FileField(blank=True, null=True)
-    kategoria = models.CharField(choices=Kategorie.choices, default=Kategorie.Inne, max_length=20)
-    popularnosc = models.IntegerField(default=0)
+    name = models.CharField(max_length=50, null=False)
+    graphics = models.FileField(blank=True, null=True)
+    category = models.CharField(choices=Category.choices, default=Category.Inne, max_length=20)
+    popularity = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.nazwa + " (" + str(self.kategoria) + ")"
+        return self.name + " (" + str(self.category) + ")"
 
 
-class Skladniki(models.Model):
-    class Przelicznik(models.TextChoices):
+class Ingredients(models.Model):
+    class Converter(models.TextChoices):
         Sztuki = 'szt'
         Kilogram = 'kg'
         Dekagram = 'dag'
@@ -33,27 +33,27 @@ class Skladniki(models.Model):
         Mililitr = 'ml'
         Szczypta = 'szczypta'
 
-    produkt = models.ForeignKey(Produkty, on_delete=models.CASCADE)
-    ilosc = models.FloatField(null=True)
-    przelicznik = models.CharField(choices=Przelicznik.choices, default=Przelicznik.Sztuki, max_length=20)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity = models.FloatField(null=True)
+    converter = models.CharField(choices=Converter.choices, default=Converter.Sztuki, max_length=20)
 
     def __str__(self):
-        return self.produkt.nazwa + " (" + str(self.ilosc) + " " + self.przelicznik + ")"
+        return self.product.name + " (" + str(self.quantity) + " " + self.converter + ")"
 
 
-class Przepisy(models.Model):
-    nazwa = models.CharField(max_length=100, null=False)
-    przygotowanie = models.TextField()
-    czas = models.IntegerField()
+class Recipes(models.Model):
+    name = models.CharField(max_length=100, null=False)
+    preparation = models.TextField()
+    time = models.IntegerField()
     photo = models.FileField(blank=True, null=True)
-    skladniki = models.ManyToManyField(Skladniki)
+    ingredients = models.ManyToManyField(Ingredients)
 
     def __str__(self):
-        return self.nazwa + " - " + str(self.czas) + " minut"
+        return self.name + " - " + str(self.time) + " minut"
 
 
-@receiver(post_save, sender=Przepisy)
+@receiver(post_save, sender=Recipes)
 def przepisy_produkty(sender, instance, **kwargs):
-    for i in instance.skladniki.all():
-        i.produkt.popularnosc += 1
-        i.produkt.save()
+    for i in instance.ingredients.all():
+        i.product.popularity += 1
+        i.product.save()

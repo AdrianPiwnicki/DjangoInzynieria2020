@@ -1,20 +1,20 @@
 from django.contrib import admin
-from .models import Produkty, Przepisy, Skladniki
+from .models import Products, Recipes, Ingredients
 
-admin.site.register(Skladniki)
+admin.site.register(Ingredients)
 
 
-@admin.register(Produkty)
+@admin.register(Products)
 class ProduktyAdmin(admin.ModelAdmin):
-    list_display = ['nazwa', 'kategoria']
-    list_editable = ['kategoria']
+    list_display = ['name', 'category']
+    list_editable = ['category']
 
 
-@admin.register(Przepisy)
+@admin.register(Recipes)
 class PrzepisyAdmin(admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
-        for i in obj.skladniki.all():
-            i.produkt.popularnosc += 1
-            i.produkt.save()
+        for i in obj.ingredients.all():
+            i.product.popularity += 1
+            i.product.save()
         return self.response_post_save_add(request, obj)

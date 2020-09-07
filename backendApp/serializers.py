@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from backendApp.models import Produkty, Przepisy, Skladniki
+from backendApp.models import Products, Recipes, Ingredients
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -9,41 +9,42 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['username', 'email']
 
 
-class ProduktySerializer(serializers.ModelSerializer):
+class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Produkty
-        fields = ['id', 'nazwa', 'grafika']
+        model = Products
+        fields = ['id', 'name', 'graphics']
 
 
-class SkladnikiSerializer(serializers.ModelSerializer):
+class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Skladniki
-        fields = ['ilosc', 'przelicznik', 'produkt']
+        model = Ingredients
+        fields = ['quantity', 'converter', 'product']
 
 
-class PrzepisySerializer(serializers.ModelSerializer):
-    skladniki = SkladnikiSerializer(many=True)
+class RecipesSerializer(serializers.ModelSerializer):
+    ingredients = IngredientsSerializer(many=True)
 
     class Meta:
-        model = Przepisy
-        fields = ['nazwa', 'przygotowanie', 'czas', 'skladniki']
+        model = Recipes
+        fields = ['name', 'preparation', 'time', 'ingredients']
 
     def create(self, validated_data):
-        skladniki = validated_data["skladniki"]
-        del validated_data["skladniki"]
+        ingredients = validated_data["ingredients"]
+        del validated_data["ingredients"]
 
-        przepis = Przepisy.objects.create(**validated_data)
+        recipe = Recipes.objects.create(**validated_data)
 
-        for skladnik in skladniki:
-            s = Skladniki.objects.create(**skladnik)
-            przepis.skladniki.add(s)
+        for ingredient in ingredients:
+            s = Ingredients.objects.create(**ingredient)
+            recipe.ingredients.add(s)
 
-        przepis.save()
-        return przepis
+        recipe.save()
+        return recipe
 
 
-class MinPrzepisySerializer(serializers.ModelSerializer):
+class MinRecipesSerializer(serializers.ModelSerializer):
+    #non_field = serializers.CharField(max_length=500)
 
     class Meta:
-        model = Przepisy
-        fields = ['id', 'nazwa', 'przygotowanie', 'photo']
+        model = Recipes
+        fields = ['id', 'name', 'preparation', 'photo']

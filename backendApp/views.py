@@ -154,5 +154,5 @@ def lista_przepisow(request):
                         przepis.preparation += "..."
                     ls_przepisow.append(przepis)
 
-    serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': list1})
+    serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list': list1})
     return JsonResponse(serializer.data, safe=False)

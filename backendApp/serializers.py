@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Count
 from rest_framework import serializers
 from backendApp.models import Products, Recipes, Ingredients
 
@@ -49,12 +50,13 @@ class RecipesSerializer(serializers.ModelSerializer):
 
 
 class MinRecipesSerializer(serializers.ModelSerializer):
-    ingredients = MinIngredientsSerializer(many=True)
+    #ingredients = MinIngredientsSerializer(many=True)
     additional = serializers.SerializerMethodField('get_additional')
+    quantity_additional = serializers.SerializerMethodField('get_quantity_additional')
 
     class Meta:
         model = Recipes
-        fields = ['id', 'name', 'preparation', 'photo', 'ingredients', 'additional']
+        fields = ['id', 'name', 'preparation', 'photo', 'additional', 'quantity_additional']
 
     def get_additional(self, obj):
         list1 = self.context.get("list1")
@@ -70,3 +72,12 @@ class MinRecipesSerializer(serializers.ModelSerializer):
             return string_lista
         else:
             return string_additional
+
+    def get_quantity_additional(self, obj):
+        products = self.context.get("list1")
+        product = 0
+        for o in obj.ingredients.all():
+            if o.product.id in products:
+                product += 1
+        quantity = obj.ingredients.count() - product
+        return quantity

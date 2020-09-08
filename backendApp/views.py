@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Q
 from rest_framework import viewsets, status, generics
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponse
 from rest_framework.utils import json
-from backendApp.models import Products, Recipes
-from backendApp.serializers import UserSerializer, ProductsSerializer, RecipesSerializer, MinRecipesSerializer
+from backendApp.models import Products, Recipes, Ingredients
+from backendApp.serializers import UserSerializer, ProductsSerializer, RecipesSerializer, MinRecipesSerializer, \
+    MinIngredientsSerializer
 from django.db.models.functions import Substr
 
 
@@ -126,7 +127,7 @@ class PrzepisyViewSet(viewsets.ModelViewSet):
 
 def lista_przepisow(request):
     body = json.loads(request.body)
-    list1 = body['produkty']
+    list1 = body['products']
     ls_przepisow = list()
 
     max_skladnikow = Recipes.objects.filter(ingredients__product__in=list1).annotate(
@@ -144,13 +145,14 @@ def lista_przepisow(request):
                     num_attr=Count('ingredients__product')).filter(num_attr=i):
                 if przepis.ingredients.count() == i + addition:
                     przepis.preparation = przepis.preparation[0:255]
-                    if przepis.preparation[254] == "!" or przepis.preparation[254] == "?" or przepis.preparation[254] == " " or przepis.preparation[254] == ",":
-                        przepis.preparation = przepis.preparation[0:254]+"..."
+                    if przepis.preparation[254] == "!" or przepis.preparation[254] == "?" or przepis.preparation[
+                        254] == " " or przepis.preparation[254] == ",":
+                        przepis.preparation = przepis.preparation[0:254] + "..."
                     elif przepis.preparation[254] == ".":
                         przepis.preparation += ".."
                     else:
                         przepis.preparation += "..."
                     ls_przepisow.append(przepis)
 
-    serializer = MinRecipesSerializer(ls_przepisow, many=True)
+    serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': list1})
     return JsonResponse(serializer.data, safe=False)

@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'backendApp',
-    'sslserver'
+    'backendApp'
 ]
 
 MIDDLEWARE = [
@@ -147,5 +146,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/imgs/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "imgs")
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

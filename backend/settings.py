@@ -24,7 +24,7 @@ SECRET_KEY = '9)cx5!%b&-=c(n(chfoa%=*foc82lt=9xfkq6&^huqn)3tpwu^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['77.55.213.212', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['77.55.213.212', '0.0.0.0', '127.0.0.1', 'yourrecipe.pl']
 
 # Application definition
 
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'backendApp'
+    'backendApp',
+    'sslserver'
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/imgs/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "imgs")
+
+SECURE_SSL_REDIRECT = True

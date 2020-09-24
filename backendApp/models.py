@@ -46,7 +46,7 @@ class Recipes(models.Model):
     preparation = models.TextField()
     time = models.IntegerField()
     photo = models.FileField(blank=True, null=True)
-    ingredients = models.ManyToManyField(Ingredients)
+    ingredients = models.ManyToManyField(Ingredients, blank=True)
 
     def __str__(self):
         return self.name + " - " + str(self.time) + " minut"

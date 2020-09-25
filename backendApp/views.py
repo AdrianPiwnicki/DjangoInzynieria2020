@@ -156,3 +156,26 @@ def lista_przepisow(request):
 
     serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': list1})
     return JsonResponse(serializer.data, safe=False)
+
+
+def wybrane(request):
+    body = json.loads(request.body)
+    products = body['products']
+    ls_przepisow = list()
+
+    for i in range(len(products), 0, -1):
+        for recipe in Recipes.objects.filter(ingredients__product__in=products).annotate(
+                num_attr=Count('ingredients__product')).filter(num_attr=i):
+            if recipe.ingredients.count() == i:
+                recipe.preparation = recipe.preparation[0:255]
+                if recipe.preparation[254] == "!" or recipe.preparation[254] == "?" or recipe.preparation[
+                    254] == " " or recipe.preparation[254] == ",":
+                    recipe.preparation = recipe.preparation[0:254] + "..."
+                elif recipe.preparation[254] == ".":
+                    recipe.preparation += ".."
+                else:
+                    recipe.preparation += "..."
+                ls_przepisow.append(recipe)
+
+    serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
+    return JsonResponse(serializer.data, safe=False)

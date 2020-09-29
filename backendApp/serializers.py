@@ -29,24 +29,24 @@ class MinIngredientsSerializer(serializers.ModelSerializer):
 
 
 class RecipesSerializer(serializers.ModelSerializer):
-    ingredients = IngredientsSerializer(many=True, required=False)
+    ingredients = IngredientsSerializer(many=True)
 
     class Meta:
         model = Recipes
         fields = ['name', 'preparation', 'time', 'ingredients', 'photo']
 
-    # def create(self, validated_data):
-    #     ingredients = validated_data["ingredients"]
-    #     del validated_data["ingredients"]
-    #
-    #     recipe = Recipes.objects.create(**validated_data)
-    #
-    #     for ingredient in ingredients:
-    #         s = Ingredients.objects.create(**ingredient)
-    #         recipe.ingredients.add(s)
-    #
-    #     recipe.save()
-    #     return recipe
+    def create(self, validated_data):
+        ingredients = validated_data["ingredients"]
+        del validated_data["ingredients"]
+
+        recipe = Recipes.objects.create(**validated_data)
+
+        for ingredient in ingredients:
+            s = Ingredients.objects.create(**ingredient)
+            recipe.ingredients.add(s)
+
+        recipe.save()
+        return recipe
 
 
 class MinRecipesSerializer(serializers.ModelSerializer):

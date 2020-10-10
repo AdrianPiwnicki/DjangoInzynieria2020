@@ -213,3 +213,35 @@ def all_wybrane_dodatkowe(request):
 
     serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
     return JsonResponse(serializer.data, safe=False)
+
+
+def lista_dodatkowe(request):
+    products = json_body_products(request, 'products')
+    ls_przepisow = list()
+
+    max_skladnikow = Recipes.objects.filter(ingredients__product__in=products).annotate(
+        num_attr=Count('ingredients__product')).filter(num_attr=len(products))
+    max_skladnik = max_skladnikow[0]
+
+    for max_count in max_skladnikow.all():
+        if max_count.ingredients.count() > max_skladnik.ingredients.count():
+            max_skladnik = max_count
+    max_skladnik = max_skladnik.ingredients.count()
+
+    for addition in range(1, max_skladnik):
+        for i in range(len(products), 0, -1):
+            for przepis in Recipes.objects.filter(ingredients__product__in=products).annotate(
+                    num_attr=Count('ingredients__product')).filter(num_attr=i):
+                if przepis.ingredients.count() == i + addition:
+                    przepis.preparation = przepis.preparation[0:255]
+                    if przepis.preparation[254] == "!" or przepis.preparation[254] == "?" or przepis.preparation[
+                        254] == " " or przepis.preparation[254] == ",":
+                        przepis.preparation = przepis.preparation[0:254] + "..."
+                    elif przepis.preparation[254] == ".":
+                        przepis.preparation += ".."
+                    else:
+                        przepis.preparation += "..."
+                    ls_przepisow.append(przepis)
+
+    serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
+    return JsonResponse(serializer.data, safe=False)

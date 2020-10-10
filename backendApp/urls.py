@@ -11,6 +11,7 @@ urlpatterns = [
     path('lista-przepisow', views.lista_przepisow),
     path('lista-wybrane', views.wybrane),
     path('lista-all-wybrane-dodatkowe', views.all_wybrane_dodatkowe),
+    path('lista-dodatkowe', views.lista_dodatkowe),
     path('produkty-inne', views.ProduktyInne.as_view()),
     path('produkty-owoce', views.ProduktyOwoce.as_view()),
     path('produkty-warzywa', views.ProduktyWarzywa.as_view()),

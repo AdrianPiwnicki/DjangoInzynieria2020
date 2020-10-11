@@ -17,9 +17,15 @@ class ProductsSerializer(serializers.ModelSerializer):
 
 
 class IngredientsSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField('get_name')
+
     class Meta:
         model = Ingredients
-        fields = ['quantity', 'converter', 'product']
+        fields = ['quantity', 'converter', 'product', 'name']
+
+    def get_name(self, obj):
+        name = Products.objects.get(id=obj.product.id)
+        return name.name
 
 
 class MinIngredientsSerializer(serializers.ModelSerializer):
@@ -50,7 +56,6 @@ class RecipesSerializer(serializers.ModelSerializer):
 
 
 class MinRecipesSerializer(serializers.ModelSerializer):
-    #ingredients = MinIngredientsSerializer(many=True)
     additional = serializers.SerializerMethodField('get_additional')
     quantity_additional = serializers.SerializerMethodField('get_quantity_additional')
 

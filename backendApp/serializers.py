@@ -58,10 +58,11 @@ class RecipesSerializer(serializers.ModelSerializer):
 class MinRecipesSerializer(serializers.ModelSerializer):
     additional = serializers.SerializerMethodField('get_additional')
     quantity_additional = serializers.SerializerMethodField('get_quantity_additional')
+    category_additional = serializers.SerializerMethodField('get_category_additional')
 
     class Meta:
         model = Recipes
-        fields = ['id', 'name', 'preparation', 'photo', 'additional', 'quantity_additional']
+        fields = ['id', 'name', 'preparation', 'photo', 'additional', 'quantity_additional', 'category_additional']
 
     def get_additional(self, obj):
         list1 = self.context.get("list1")
@@ -86,3 +87,13 @@ class MinRecipesSerializer(serializers.ModelSerializer):
                 product += 1
         quantity = obj.ingredients.count() - product
         return quantity
+
+    def get_category_additional(self, obj):
+        products = self.context.get("list1")
+        category = []
+        for o in obj.ingredients.all():
+            if o.product.id not in products:
+                product = Products.objects.get(id=o.product.id)
+                if product.category not in category:
+                    category.append(product.category)
+        return category

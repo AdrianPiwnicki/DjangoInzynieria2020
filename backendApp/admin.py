@@ -6,8 +6,9 @@ admin.site.register(Ingredients)
 
 @admin.register(Products)
 class ProduktyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category']
-    list_editable = ['category']
+    list_display = ['name', 'category', 'graphics']
+    list_editable = ['category', 'graphics']
+    search_fields = ['name']
 
 
 @admin.register(Recipes)

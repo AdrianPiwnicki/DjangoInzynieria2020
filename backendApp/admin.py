@@ -1,13 +1,14 @@
 from django.contrib import admin
-from .models import Products, Recipes, Ingredients
+from .models import Products, Recipes, Ingredients, Graphics
 
 admin.site.register(Ingredients)
+admin.site.register(Graphics)
 
 
 @admin.register(Products)
 class ProduktyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'graphics']
-    list_editable = ['category', 'graphics']
+    list_display = ['name', 'category']
+    list_editable = ['category']
     search_fields = ['name']
 
 

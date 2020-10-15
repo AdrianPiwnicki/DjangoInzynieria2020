@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import Count
 from rest_framework import serializers
-from backendApp.models import Products, Recipes, Ingredients
+from backendApp.models import Products, Recipes, Ingredients, Graphics
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -10,10 +10,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['username', 'email']
 
 
+class GraphicsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Graphics
+        fields = ['graphic']
+
+
 class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
-        fields = ['id', 'name', 'graphics']
+        fields = ['id', 'name', 'graphic_id']
 
 
 class IngredientsSerializer(serializers.ModelSerializer):
@@ -73,7 +79,7 @@ class MinRecipesSerializer(serializers.ModelSerializer):
                 string_additional += ", "
         if string_additional != "":
             lista = list(string_additional)
-            lista = lista[:len(lista)-2]
+            lista = lista[:len(lista) - 2]
             string_lista = "".join(lista)
             return string_lista
         else:

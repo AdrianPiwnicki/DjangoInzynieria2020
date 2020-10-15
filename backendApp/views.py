@@ -5,9 +5,9 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponse
 from rest_framework.utils import json
-from backendApp.models import Products, Recipes, Ingredients
+from backendApp.models import Products, Recipes, Ingredients, Graphics
 from backendApp.serializers import UserSerializer, ProductsSerializer, RecipesSerializer, MinRecipesSerializer, \
-    MinIngredientsSerializer
+    MinIngredientsSerializer, GraphicsSerializer
 from django.db.models.functions import Substr
 
 
@@ -16,9 +16,9 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class ProduktyViewSet(viewsets.ModelViewSet):
-    queryset = Products.objects.all()
-    serializer_class = ProductsSerializer
+class GraphicsViewSet(viewsets.ModelViewSet):
+    queryset = Graphics.objects.all()
+    serializer_class = GraphicsSerializer
     parser_class = (FileUploadParser,)
 
     def post(self, request, *args, **kwargs):
@@ -28,6 +28,11 @@ class ProduktyViewSet(viewsets.ModelViewSet):
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProduktyViewSet(viewsets.ModelViewSet):
+    queryset = Products.objects.all()
+    serializer_class = ProductsSerializer
 
 
 class ProduktyWszystkie(generics.ListAPIView):

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="60"
+   height="60"
+   viewBox="0 0 15.875 15.875"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="cytryna.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="38.915791"
+     inkscape:cy="27.740154"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="true"
+     inkscape:window-width="1677"
+     inkscape:window-height="977"
+     inkscape:window-x="192"
+     inkscape:window-y="6"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Warstwa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#dcca29;stroke:#8a791e;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="M 0.80671335,11.731928 C -0.11730162,9.0952082 0.70176739,7.46599 1.6173588,5.8925617 2.4748102,4.7582742 3.8145007,4.1223289 5.1698934,3.5026102 6.6782912,3.117966 8.0160154,3.3065337 9.2708061,3.7736357 9.6850753,3.6144937 10.039412,3.6411521 10.391405,3.675081 c 0.237913,0.1608007 0.483608,0.2492377 0.691432,0.6898829 0.07045,0.455385 -0.05279,0.7665366 -0.09537,1.1333792 0.669051,1.6697119 0.483374,3.3898963 0.04769,5.1248449 C 10.51521,11.692636 9.8586325,12.722866 8.77012,13.629107 7.7755428,14.426453 6.577147,14.760424 5.2652702,14.836402 4.501281,14.798521 3.8254955,14.487204 3.1194441,14.269712 2.4217368,14.289591 1.7259929,14.352086 0.99746053,13.703022 0.65709889,13.045991 0.74683404,12.388959 0.80672042,11.731928 Z"
+       id="path882"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       style="fill:#ffffff;stroke:#ffffff;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="M 2.0107601,6.7056381 C 4.0040759,5.2946338 5.9355876,3.7814411 9.008538,4.155535 7.7528323,3.9118929 6.4971266,3.669037 5.2414209,4.1308965 3.7140702,4.7196403 2.979352,5.7826001 2.0107601,6.7056381 Z"
+       id="path884"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#3c7f38;stroke:#22471f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 10.713278,3.7859551 c 0.549649,-0.8192164 0.82741,-1.6777681 0.584142,-2.6116998 0.357641,-0.19292144 0.72322,-0.18897786 1.096756,0.01232 -0.104425,1.0832179 -0.47767,2.1044117 -1.310934,2.9911486 0.360381,0.5878892 0.968324,0.5788413 1.075586,1.7770618 -0.224065,0.82997 0.0069,1.5972478 0.455198,2.3345714 0.627386,1.0396019 1.996983,1.5662781 3.16953,2.2126149 C 15.336975,9.0320136 15.168862,7.6071314 14.535976,5.7805633 13.470969,5.0123237 12.527531,3.8253198 11.082837,4.3649639"
+       id="path886"
+       sodipodi:nodetypes="ccccccccc" />
+    <path
+       style="fill:none;stroke:#22471f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 12.496011,5.1010985 14.45168,8.3416228"
+       id="path888" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Warstwa 2" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Warstwa 3" />
+</svg>

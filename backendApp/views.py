@@ -5,29 +5,15 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponse
 from rest_framework.utils import json
-from backendApp.models import Products, Recipes, Ingredients, Graphics
+from backendApp.models import Products, Recipes, Ingredients
 from backendApp.serializers import UserSerializer, ProductsSerializer, RecipesSerializer, MinRecipesSerializer, \
-    MinIngredientsSerializer, GraphicsSerializer
+    MinIngredientsSerializer
 from django.db.models.functions import Substr
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-
-
-class GraphicsViewSet(viewsets.ModelViewSet):
-    queryset = Graphics.objects.all()
-    serializer_class = GraphicsSerializer
-    parser_class = (FileUploadParser,)
-
-    def post(self, request, *args, **kwargs):
-        file_serializer = ProductsSerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.save()
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProduktyViewSet(viewsets.ModelViewSet):

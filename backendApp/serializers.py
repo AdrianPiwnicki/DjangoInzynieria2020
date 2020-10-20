@@ -1,19 +1,13 @@
 from django.contrib.auth.models import User
 from django.db.models import Count
 from rest_framework import serializers
-from backendApp.models import Products, Recipes, Ingredients, Graphics
+from backendApp.models import Products, Recipes, Ingredients
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email']
-
-
-class GraphicsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Graphics
-        fields = ['graphic']
 
 
 class ProductsSerializer(serializers.ModelSerializer):

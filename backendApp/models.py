@@ -1,13 +1,7 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-
-class Graphics(models.Model):
-    graphic = models.FileField(blank=True, null=True)
-
-    def __str__(self):
-        return str(self.graphic)
 
 
 class Products(models.Model):
@@ -22,7 +16,7 @@ class Products(models.Model):
         Przyprawy = 'przyprawy'
 
     name = models.CharField(max_length=50, null=False)
-    graphic = models.ForeignKey(Graphics, on_delete=models.CASCADE, default=1)
+    graphic_id = models.IntegerField(default=0, validators=[MaxValueValidator(31), MinValueValidator(0)])
     category = models.CharField(choices=Category.choices, default=Category.Inne, max_length=20)
     popularity = models.IntegerField(default=0)
 

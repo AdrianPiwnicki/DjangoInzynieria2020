@@ -15,7 +15,7 @@ class Products(models.Model):
         Przyprawy = 'przyprawy'
 
     name = models.CharField(max_length=50, null=False)
-    graphic = models.FileField(blank=True, null=True)
+    graphics = models.FileField(blank=True, null=True)
     category = models.CharField(choices=Category.choices, default=Category.Inne, max_length=20)
     popularity = models.IntegerField(default=0)
 

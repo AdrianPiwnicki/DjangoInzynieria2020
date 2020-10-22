@@ -12,7 +12,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
-        fields = ['id', 'name', 'graphic']
+        fields = ['id', 'name', 'graphics']
 
 
 class IngredientsSerializer(serializers.ModelSerializer):

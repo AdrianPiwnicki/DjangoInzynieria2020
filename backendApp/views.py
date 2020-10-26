@@ -123,6 +123,11 @@ class PrzepisyViewSet(viewsets.ModelViewSet):
     serializer_class = RecipesSerializer
 
 
+class RecipeDetail(generics.RetrieveAPIView):
+    queryset = Recipes.objects.all()
+    serializer_class = RecipesSerializer
+
+
 ###############################################################################
 # ----------------------------FUNKCJE POMOCNICZE------------------------------#
 ###############################################################################

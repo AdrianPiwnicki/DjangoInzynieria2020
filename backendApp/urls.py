@@ -8,6 +8,7 @@ router.register(r'przepisy', views.PrzepisyViewSet)
 router.register(r'produkty', views.ProduktyViewSet)
 
 urlpatterns = [
+    path('recipe-detail/<int:pk>', views.RecipeDetail.as_view()),
     path('lista-przepisow', views.lista_przepisow),
     path('lista-wybrane', views.wybrane),
     path('lista-all-wybrane-dodatkowe', views.all_wybrane_dodatkowe),

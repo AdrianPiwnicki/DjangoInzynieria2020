@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'backendApp',
-    'sslserver'
+    'sslserver',
+    'django_crontab'
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 
@@ -149,3 +150,7 @@ MEDIA_URL = '/imgs/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "imgs")
 
 SECURE_SSL_REDIRECT = True
+
+CRONJOBS = [
+    ('*/1 * * * *', 'backendApp.cron.calculation_rate')
+]

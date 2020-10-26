@@ -7,6 +7,8 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.utils import json
 from backendApp.models import Products, Recipes, Ingredients
 from backendApp.serializers import UserSerializer, ProductsSerializer, RecipesSerializer, MinRecipesSerializer
+from celery.schedules import crontab
+from celery.task import periodic_task
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -127,6 +129,13 @@ class RecipeDetail(generics.RetrieveAPIView):
     queryset = Recipes.objects.all()
     serializer_class = RecipesSerializer
 
+    def get(self, *args, **kwargs):
+        queryset = Recipes.objects.get(id=self.kwargs['pk'])
+        queryset.views += 1
+        queryset.save()
+        serializer = RecipesSerializer(queryset, many=False)
+        return Response(serializer.data)
+
 
 ###############################################################################
 # ----------------------------FUNKCJE POMOCNICZE------------------------------#
@@ -151,6 +160,7 @@ def format_preparation(przepis):
         else:
             przepis.preparation += "..."
         return przepis
+
 
 ###############################################################################
 # ----------------------------FUNKCJE FILTRÓW---------------------------------#
@@ -243,3 +253,15 @@ def lista_dodatkowe(request):
 
     serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
     return JsonResponse(serializer.data, safe=False)
+
+
+###############################################################################
+# ----------------------------OBLICZANIE RATE---------------------------------#
+###############################################################################
+
+@periodic_task(run_every=crontab(hour=23, minute=45, day_of_week=1), name="calculation_rate")
+def calculation_rate():
+    recipes = Recipes.objects.all()
+    for recipe in recipes:
+        recipe.rate += 1
+        recipe.save()

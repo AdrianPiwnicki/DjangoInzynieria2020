@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 
@@ -18,6 +18,12 @@ class Products(models.Model):
     graphics = models.FileField(blank=True, null=True)
     category = models.CharField(choices=Category.choices, default=Category.Inne, max_length=20)
     popularity = models.IntegerField(default=0)
+
+
+@receiver(pre_delete, sender=Products)
+def delete_image(sender, instance, **kwargs):
+    if instance.graphics:
+        instance.graphics.delete(False)
 
     def __str__(self):
         return self.name + " (" + str(self.category) + ")"
@@ -47,6 +53,8 @@ class Recipes(models.Model):
     time = models.IntegerField()
     photo = models.FileField(blank=True, null=True)
     ingredients = models.ManyToManyField(Ingredients, blank=True, related_name='recipes')
+    views = models.IntegerField(default=0)
+    rate = models.FloatField(default=0)
 
     def __str__(self):
         return self.name + " - " + str(self.time) + " minut"

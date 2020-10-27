@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'backendApp',
     'sslserver',
-    'django_crontab'
+    'django_crontab',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

@@ -150,14 +150,24 @@ def format_preparation(przepis):
         return przepis
     else:
         przepis.preparation = przepis.preparation[0:255]
-        if przepis.preparation[254] == "!" or przepis.preparation[254] == "?" or przepis.preparation[
-            254] == " " or przepis.preparation[254] == ",":
-            przepis.preparation = przepis.preparation[0:254] + "..."
-        elif przepis.preparation[254] == ".":
-            przepis.preparation += ".."
-        else:
-            przepis.preparation += "..."
+        i = 254
+        while not przepis.preparation[i].isalpha():
+            i -= 1
+        przepis.preparation = przepis.preparation[0:i+1]+"..."
         return przepis
+        # if przepis.preparation[254] == "!" or przepis.preparation[254] == "?" or przepis.preparation[
+        #     254] == " " or przepis.preparation[254] == ",":
+        #     przepis.preparation = przepis.preparation[0:254] + "..."
+        # elif przepis.preparation[254] == ".":
+        #     przepis.preparation += ".."
+        # else:
+        #     przepis.preparation += "..."
+        # return przepis
+
+
+def test_function(request):
+    przepis = Recipes.objects.first()
+    return HttpResponse(przepis.preparation[36].isalpha())
 
 
 ###############################################################################
@@ -170,7 +180,7 @@ def lista_przepisow(request):
     max_skladnikow = []
 
     for elem in range(len(list1)):
-        max_skladnikow += Recipes.objects.filter(ingredients__product__in=list1).annotate(
+        max_skladnikow |= Recipes.objects.filter(ingredients__product__in=list1).annotate(
             num_attr=Count('ingredients__product')).filter(num_attr=elem + 1)
 
     max_skladnik = max_skladnikow[0]

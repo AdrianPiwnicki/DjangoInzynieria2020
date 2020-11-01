@@ -39,8 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'backendApp',
     'sslserver',
-    'django_crontab',
-    'django_extensions'
+    'django_crontab'
 ]
 
 MIDDLEWARE = [
@@ -149,9 +148,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/imgs/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "imgs")
-
 SECURE_SSL_REDIRECT = True
 
 CRONJOBS = [
-    ('*/1 * * * *', 'backendApp.cron.calculation_rate')
+    ('0 */2 * * *', 'backendApp.cron.calculation_rate')
 ]

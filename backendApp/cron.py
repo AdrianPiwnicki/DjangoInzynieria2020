@@ -12,10 +12,9 @@ def calculation_rate():
 
     recipes = Recipes.objects.all()
     for recipe in recipes:
-        views = recipe.views/scale
         d = 0.5
         k = 1
-        while views <= k*scale:
+        while recipe.views > k*scale:
             k += 1
             d += 0.5
         recipe.rate = d

@@ -38,7 +38,7 @@ class RecipesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipes
-        fields = ['name', 'preparation', 'time', 'ingredients', 'photo']
+        fields = ['name', 'preparation', 'time', 'ingredients', 'photo', 'rate']
 
     def create(self, validated_data):
         ingredients = validated_data["ingredients"]

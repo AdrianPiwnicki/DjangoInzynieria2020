@@ -139,7 +139,7 @@ class RecipeDetail(generics.RetrieveAPIView):
 # ----------------------------FUNKCJE POMOCNICZE------------------------------#
 ###############################################################################
 
-def json_body_products(request, values):
+def json_body(request, values):
     body = json.loads(request.body)
     products = body[values]
     return products
@@ -153,7 +153,7 @@ def format_preparation(przepis):
         i = 254
         while not przepis.preparation[i].isalpha():
             i -= 1
-        przepis.preparation = przepis.preparation[0:i+1]+"..."
+        przepis.preparation = przepis.preparation[0:i + 1] + "..."
         return przepis
         # if przepis.preparation[254] == "!" or przepis.preparation[254] == "?" or przepis.preparation[
         #     254] == " " or przepis.preparation[254] == ",":
@@ -175,12 +175,14 @@ def test_function(request):
 ###############################################################################
 
 def lista_przepisow(request):
-    list1 = json_body_products(request, 'products')
+    list1 = json_body(request, 'products')
     ls_przepisow = list()
     max_skladnikow = []
+    sortBy = json_body(request, 'sortBy')
+    categories = json_body(request, 'categories')
 
     for elem in range(len(list1)):
-        max_skladnikow |= Recipes.objects.filter(ingredients__product__in=list1).annotate(
+        max_skladnikow += Recipes.objects.filter(ingredients__product__in=list1).annotate(
             num_attr=Count('ingredients__product')).filter(num_attr=elem + 1)
 
     max_skladnik = max_skladnikow[0]
@@ -196,12 +198,34 @@ def lista_przepisow(request):
                 if przepis.ingredients.count() == i + addition:
                     ls_przepisow.append(format_preparation(przepis))
 
+    if sortBy == "time":
+        ls_przepisow.sort(key=lambda x: x.time)
+    else:
+        ls_przepisow.sort(key=lambda x: x.rate)
+
+    # category = []
+    # for o in obj.ingredients.all():
+    #     if o.product.id not in products:
+    #         product = Products.objects.get(id=o.product.id)
+    #         if product.category not in category:
+    #             category.append(product.category)
+
+    for przepis in ls_przepisow:
+        for ingredient in przepis.ingredients.all():
+            if ingredient.product.id not in list1:
+                product = Products.objects.get(id=ingredient.product.id)
+                for key in categories:
+                    if product.category == key:
+                        return HttpResponse('Good')
+                    else:
+                        return HttpResponse('Bad')
+
     serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': list1})
     return JsonResponse(serializer.data, safe=False)
 
 
 def wybrane(request):
-    products = json_body_products(request, 'products')
+    products = json_body(request, 'products')
     ls_przepisow = list()
 
     for i in range(len(products), 0, -1):
@@ -215,7 +239,7 @@ def wybrane(request):
 
 
 def all_wybrane_dodatkowe(request):
-    products = json_body_products(request, 'products')
+    products = json_body(request, 'products')
     ls_przepisow = list()
 
     max_skladnikow = Recipes.objects.filter(ingredients__product__in=products).annotate(
@@ -238,7 +262,7 @@ def all_wybrane_dodatkowe(request):
 
 
 def lista_dodatkowe(request):
-    products = json_body_products(request, 'products')
+    products = json_body(request, 'products')
     ls_przepisow = list()
     max_skladnikow = []
 
@@ -258,6 +282,26 @@ def lista_dodatkowe(request):
                     num_attr=Count('ingredients__product')).filter(num_attr=i):
                 if przepis.ingredients.count() == i + addition:
                     ls_przepisow.append(format_preparation(przepis))
+
+    categories = json_body(request, 'categories')
+    false_categories = []
+    filtered_recipes = ls_przepisow
+    del_recipes = []
+
+    for key, value in categories.items():
+        if not value:
+            false_categories.append(key)
+
+    for przepis in filtered_recipes:
+        for ingredient in przepis.ingredients.all():
+            if ingredient.product.id not in products:
+                product = Products.objects.get(id=ingredient.product.id)
+                if product.category in false_categories:
+                    if przepis not in del_recipes:
+                        del_recipes.append(przepis)
+
+    for deleting_recipe in del_recipes:
+        ls_przepisow.remove(deleting_recipe)
 
     serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
     return JsonResponse(serializer.data, safe=False)

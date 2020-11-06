@@ -61,7 +61,7 @@ class MinRecipesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipes
-        fields = ['id', 'name', 'preparation', 'photo', 'additional', 'quantity_additional', 'category_additional']
+        fields = ['id', 'name', 'preparation', 'photo', 'additional', 'quantity_additional', 'category_additional', 'time']
 
     def get_additional(self, obj):
         list1 = self.context.get("list1")

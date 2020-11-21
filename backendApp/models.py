@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
+from django.http import HttpResponse
 
 
 class Products(models.Model):
@@ -61,7 +62,7 @@ class Recipes(models.Model):
 
 
 @receiver(post_save, sender=Recipes)
-def przepisy_produkty(sender, instance, **kwargs):
+def przepisy_produkty(sender, instance, created, **kwargs):
     for i in instance.ingredients.all():
         i.product.popularity += 1
         i.product.save()

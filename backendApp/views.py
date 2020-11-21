@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, F
 from rest_framework import viewsets, status, generics
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
@@ -129,9 +129,8 @@ class RecipeDetail(generics.RetrieveAPIView):
 
     def get(self, *args, **kwargs):
         queryset = Recipes.objects.get(id=self.kwargs['pk'])
-        queryset.views += 1
-        queryset.save()
         serializer = RecipesSerializer(queryset, many=False)
+        Recipes.objects.filter(id=queryset.id).update(views=F('views')+1)
         return Response(serializer.data)
 
 

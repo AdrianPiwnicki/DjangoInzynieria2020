@@ -16,6 +16,7 @@ def calculation_rate():
         k = 1
         while recipe.views > k*scale:
             k += 1
-            d += 0.5
+            if d < 5:
+                d += 0.5
         recipe.rate = d
         recipe.save()

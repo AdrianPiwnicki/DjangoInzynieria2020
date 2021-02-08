@@ -252,15 +252,6 @@ def all_wybrane_dodatkowe(request):
     for recipe in recipes.all():
         max_skladnikow.append(recipe.ingredients.count())
 
-    # max_skladnikow = Recipes.objects.filter(ingredients__product__in=products).annotate(
-    #     num_attr=Count('ingredients__product')).filter(num_attr=len(products))
-    # max_skladnik = max_skladnikow[0]
-    #
-    # for max_count in max_skladnikow.all():
-    #     if max_count.ingredients.count() > max_skladnik.ingredients.count():
-    #         max_skladnik = max_count
-    # max_skladnik = max_skladnik.ingredients.count()
-
     for addition in range(max(max_skladnikow)):
         for przepis in Recipes.objects.filter(ingredients__product__in=products).annotate(
                 num_attr=Count('ingredients__product')).filter(num_attr=len(products)):
@@ -301,27 +292,21 @@ def lista_dodatkowe(request):
     ls_przepisow = list()
     max_skladnikow = []
 
-    # for elem in range(len(products)):
-    #     max_skladnikow += Recipes.objects.filter(ingredients__product__in=products).annotate(
-    #         num_attr=Count('ingredients__product')).filter(num_attr=elem + 1)
-    # max_skladnik = max_skladnikow[0]
-    # for max_count in max_skladnikow:
-    #     if max_count.ingredients.count() > max_skladnik.ingredients.count():
-    #         max_skladnik = max_count
-    #
-    # max_skladnik = max_skladnik.ingredients.count()
-
     for elem in range(len(products)):
         recipes = Recipes.objects.filter(ingredients__product__in=products).annotate(num_attr=Count('ingredients__product')).filter(num_attr=elem + 1)
         for recipe in recipes.all():
             max_skladnikow.append(recipe.ingredients.count())
 
-    for addition in range(1, max(max_skladnikow)):
-        for i in range(len(products), 0, -1):
-            for przepis in Recipes.objects.filter(ingredients__product__in=products).annotate(
-                    num_attr=Count('ingredients__product')).filter(num_attr=i):
-                if przepis.ingredients.count() == i + addition:
-                    ls_przepisow.append(format_preparation(przepis))
+    if max_skladnikow:
+        for addition in range(1, max(max_skladnikow)):
+            for i in range(len(products), 0, -1):
+                for przepis in Recipes.objects.filter(ingredients__product__in=products).annotate(
+                        num_attr=Count('ingredients__product')).filter(num_attr=i):
+                    if przepis.ingredients.count() == i + addition:
+                        ls_przepisow.append(format_preparation(przepis))
+    else:
+        serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
+        return JsonResponse(serializer.data, safe=False)
 
     false_categories = []
     del_recipes = []

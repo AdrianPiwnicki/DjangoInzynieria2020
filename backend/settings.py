@@ -151,5 +151,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "imgs")
 SECURE_SSL_REDIRECT = True
 
 CRONJOBS = [
-    ('1 * * * *', 'backendApp.cron.calculation_rate')
+    ('0 */24 * * *', 'backendApp.cron.calculation_rate')
 ]

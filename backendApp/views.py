@@ -186,12 +186,16 @@ def lista_przepisow(request):
         for recipe in recipes.all():
             max_skladnikow.append(recipe.ingredients.count())
 
-    for addition in range(max(max_skladnikow)):
-        for i in range(len(list1), 0, -1):
-            for przepis in Recipes.objects.filter(ingredients__product__in=list1).annotate(
-                    num_attr=Count('ingredients__product')).filter(num_attr=i):
-                if przepis.ingredients.count() == i + addition:
-                    ls_przepisow.append(format_preparation(przepis))
+    if max_skladnikow:
+        for addition in range(max(max_skladnikow)):
+            for i in range(len(list1), 0, -1):
+                for przepis in Recipes.objects.filter(ingredients__product__in=list1).annotate(
+                        num_attr=Count('ingredients__product')).filter(num_attr=i):
+                    if przepis.ingredients.count() == i + addition:
+                        ls_przepisow.append(format_preparation(przepis))
+    else:
+        serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': list1})
+        return JsonResponse(serializer.data, safe=False)
 
     false_categories = []
     del_recipes = []
@@ -252,11 +256,15 @@ def all_wybrane_dodatkowe(request):
     for recipe in recipes.all():
         max_skladnikow.append(recipe.ingredients.count())
 
-    for addition in range(max(max_skladnikow)):
-        for przepis in Recipes.objects.filter(ingredients__product__in=products).annotate(
-                num_attr=Count('ingredients__product')).filter(num_attr=len(products)):
-            if przepis.ingredients.count() == len(products) + addition:
-                ls_przepisow.append(format_preparation(przepis))
+    if max_skladnikow:
+        for addition in range(max(max_skladnikow)):
+            for przepis in Recipes.objects.filter(ingredients__product__in=products).annotate(
+                    num_attr=Count('ingredients__product')).filter(num_attr=len(products)):
+                if przepis.ingredients.count() == len(products) + addition:
+                    ls_przepisow.append(format_preparation(przepis))
+    else:
+        serializer = MinRecipesSerializer(ls_przepisow, many=True, context={'list1': products})
+        return JsonResponse(serializer.data, safe=False)
 
     false_categories = []
     del_recipes = []
